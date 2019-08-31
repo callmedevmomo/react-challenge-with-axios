@@ -1,9 +1,9 @@
 import React from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
 import Header from "./Header";
-import Coins from "../Screens/Coin/Coins";
-import Exchanges from "../Screens/Exchange/Exchanges";
-import Prices from "../Screens/Price/Prices";
+import Coins from "../Screens/Coin";
+import Exchanges from "../Screens/Exchange";
+import Prices from "../Screens/Price";
 
 export default () => {
   return (
