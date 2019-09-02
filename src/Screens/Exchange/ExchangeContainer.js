@@ -1,37 +1,26 @@
 import React from "react";
-import { allApi } from "../../api";
 import ExchangePresenter from "./ExchangePresenter";
+import { allApi } from "../../api";
 
 export default class extends React.Component {
   state = {
-    exchangeApi: null,
-    error: null,
-    loading: true
+    loading: true,
+    exchanges: []
   };
-
-  async componentDidMount() {
+  getExchanges = async () => {
     try {
-      const { data: exchangeApi } = await allApi.exchangeApi();
-      this.setState({ exchangeApi });
-    } catch {
-      this.setState({
-        error: "Can't get data🤣"
-      });
+      const { data: exchanges } = await allApi.getExchanges();
+      this.setState({ exchanges });
+    } catch (e) {
+      console.log(e);
     } finally {
-      this.setState({
-        loading: false
-      });
+      this.setState({ loading: false });
     }
+  };
+  componentDidMount() {
+    this.getExchanges();
   }
-
   render() {
-    const { exchangeApi, error, loading } = this.state;
-    return (
-      <ExchangePresenter
-        exchangeApi={exchangeApi}
-        error={error}
-        loading={loading}
-      />
-    );
+    return <ExchangePresenter {...this.state} />;
   }
 }

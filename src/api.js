@@ -5,9 +5,9 @@ const api = axios.create({
 });
 
 export const allApi = {
-  homeApi: () => api.get("/tickers"),
-  exchangeApi: () => api.get("/exchanges"),
-  coinsApi: () => api.get("/coins")
+  getPrices: () => api.get("/tickers"),
+  getExchanges: () => api.get("/exchanges"),
+  getCoins: () => api.get("/coins")
 };
 
 export default api;

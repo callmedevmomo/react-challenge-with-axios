@@ -1,34 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import Loader from "../../Components/Loader";
+import Coin from "../../Components/Coin";
 
-const Container = styled.div``;
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const CoinPresenter = ({ coinsApi, error, loading }) =>
+const CoinPresenter = ({ loading, coins }) =>
   loading ? (
     <Loader />
   ) : (
-    <Container>
-      {coinsApi && coinsApi.length > 0 && (
-        <Wrapper>
-          {coinsApi.map(data => (
-            <span>
-              {data.rank} / {data.name} / {data.symbol}
-            </span>
-          ))}
-        </Wrapper>
-      )}
-    </Container>
+    coins
+      .filter(a => a.rank !== 0)
+      .sort((a, b) => a.rank - b.rank)
+      .map(a => <Coin key={a.id} {...a} />)
   );
-
 CoinPresenter.propTypes = {
-  coinsApi: PropTypes.array,
-  error: PropTypes.string,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  coins: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      symbol: PropTypes.string.isRequired,
+      rank: PropTypes.number.isRequired
+    }).isRequired
+  ).isRequired
 };
 
 export default CoinPresenter;

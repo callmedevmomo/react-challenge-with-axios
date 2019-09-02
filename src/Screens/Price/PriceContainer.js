@@ -1,32 +1,30 @@
 import React from "react";
-import { allApi } from "../../api";
 import PricePresenter from "./PricePresenter";
+import { allApi } from "../../api";
 
 export default class extends React.Component {
   state = {
-    homeApi: null,
-    error: null,
-    loading: true
+    loading: true,
+    prices: []
   };
-
-  async componentDidMount() {
-    try {
-      const { data: homeApi } = await allApi.homeApi();
-
-      this.setState({
-        homeApi
-      });
-    } catch {
-      this.setState({
-        error: "Can't get data🤣"
-      });
-    } finally {
-      this.setState({ loading: false });
-    }
+  componentDidMount() {
+    this.getPrices();
   }
-
+  getPrices = async () => {
+    try {
+      const { data: prices } = await allApi.getPrices();
+      this.setState({
+        prices
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.setState({
+        loading: false
+      });
+    }
+  };
   render() {
-    const { homeApi, error, loading } = this.state;
-    return <PricePresenter homeApi={homeApi} error={error} loading={loading} />;
+    return <PricePresenter {...this.state} />;
   }
 }

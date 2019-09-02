@@ -4,34 +4,27 @@ import CoinPresenter from "./CoinPresenter";
 
 export default class extends React.Component {
   state = {
-    coinsApi: null,
-    error: null,
-    loading: true
+    loading: false,
+    coins: []
   };
-  async componentDidMount() {
+  getCoins = async () => {
     try {
-      const { data: coinsApi } = await allApi.coinsApi();
-      const momo = coinsApi.slice().sort(function(a, b) {
-        return b.rank - a.rank;
-      });
-      const newarr = momo.filter(data => data.rank >= 1).reverse(-1);
+      const { data: coins } = await allApi.getCoins();
       this.setState({
-        coinsApi: newarr
+        coins
       });
-    } catch {
-      this.setState({
-        error: "Can't get data🤣"
-      });
+    } catch (e) {
+      console.log(e);
     } finally {
       this.setState({
         loading: false
       });
     }
+  };
+  componentDidMount() {
+    this.getCoins();
   }
   render() {
-    const { coinsApi, error, loading } = this.state;
-    return (
-      <CoinPresenter coinsApi={coinsApi} error={error} loading={loading} />
-    );
+    return <CoinPresenter {...this.state} />;
   }
 }

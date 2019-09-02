@@ -1,35 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import Loader from "../../Components/Loader";
+import Price from "../../Components/Price";
 
-const Container = styled.div``;
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const PricePresenter = ({ homeApi, error, loading }) =>
-  loading ? (
-    <Loader />
-  ) : (
-    <Container>
-      {homeApi && homeApi.length > 0 && (
-        <Wrapper>
-          {homeApi.map(data => (
-            <span key={data.id}>
-              {data.name} / {data.symbol} / $ {data.quotes.USD.price}
-            </span>
-          ))}
-        </Wrapper>
-      )}
-    </Container>
-  );
+const PricePresenter = ({ loading, prices }) =>
+  loading ? <Loader /> : prices.map(a => <Price key={a.id} {...a} />);
 
 PricePresenter.propTypes = {
-  homeApi: PropTypes.array,
-  error: PropTypes.string,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  prices: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      symbol: PropTypes.string.isRequired,
+      quotes: PropTypes.shape({
+        USD: PropTypes.shape({
+          price: PropTypes.number.isRequired
+        }).isRequired
+      }).isRequired
+    }).isRequired
+  ).isRequired
 };
-
 export default PricePresenter;
